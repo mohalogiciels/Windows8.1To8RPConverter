@@ -6,7 +6,8 @@ made with Visual Basic .NET in Visual Studio 2012 in Windows 8.1
 A program which applies the Windows 8 Release Preview theme to Windows 8.1, as well as installing programs and replacing some system files with original files of Windows 8 RP and RTM, to make it look almost like this version of Windows 8 with its native Aero interface and beautiful wallpapers.
 
 <b>Download <code>setup_w8rpconv.exe</code> now: <a href="https://github.com/win8-png/win8rpconv/releases">here</a></b>
-The file works for both 32-bit and 64-bit systems.
+
+This file works for both 32-bit and 64-bit systems.
 
 Programs which can be installed:
 * <b>Aero Glass for Windows 8.1</b> by Big Muscle
