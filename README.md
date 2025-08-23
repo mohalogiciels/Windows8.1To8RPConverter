@@ -10,6 +10,7 @@ A program which applies the Windows 8 Release Preview theme to Windows 8.1, as w
 This file works for both 32-bit and 64-bit systems.
 
 Programs which can be installed:
+* <a href="https://www.deviantart.com/yash12396/art/Windows-8-Release-Preview-VS-for-Windows-8-1-1-764774206">Theme itself</a> by yash12396 on DeviantArt
 * <b>Aero Glass for Windows 8.1</b> by Big Muscle
 * <b>OldNewExplorer</b> by Tihiy
 * Choice of two UXTheme patchers: either <b>UltraUXThemePatcher</b> by M. Hoefs or <b>UXThemeSignatureBypass</b> by Big Muscle
