@@ -1,4 +1,6 @@
 # Windows 8.1 to Windows 8 Release Preview Converter
+100% created in Windows with Visual Basic .NET
+
 <img width="570" height="152" alt="win81to8rp_logo_github" src="https://github.com/user-attachments/assets/f29a00e4-fc21-4727-9c3c-970088a326a3" />
 
 A program which applies the Windows 8 Release Preview theme to Windows 8.1, as well as installing programs and replacing some system files with original files of Windows 8 RP and RTM, to make it look almost like this version of Windows 8 with its native Aero interface and beautiful wallpapers.
