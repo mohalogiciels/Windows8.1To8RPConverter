@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html version="-//W3C//DTD XHTML 1.1//EN"
+	xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.w3.org/1999/xhtml
+						http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd">
+	<head>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+		<meta http-equiv="content-style-type" content="text/css" />
+		<link rel="icon" href=".\firstrun\icon.ico" type="image/vnd.microsoft.icon" />
+		<title>Welcome to your “new” Windows 8.1</title>
+		<style type="text/css">
+		<![CDATA[
+			body {
+				background-color: #034050;
+				color: lightblue;
+				font-family: "Segoe UI", Arial, sans-serif;
+				text-align: center;
+			}
+			
+			.firstrun { font-size: 20px; }
+			
+			* { box-sizing: border-box; }
+			
+			.img-comp-container {
+				position: relative;
+				height: 170px;
+				width: 300px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			
+			.img-comp-img {
+				position: absolute;
+				width: auto;
+				height: auto;
+				overflow: hidden;
+			}
+			
+			.img-comp-img img {
+				display: block;
+				vertical-align: middle;
+			}
+			
+			.img-comp-slider {
+				position: absolute;
+				z-index: 9;
+				cursor: ew-resize;
+				width: 40px;
+				height: 40px;
+				background-color: #2196F3;
+				opacity: 0.7;
+				border-radius: 50%;
+			}
+		]]>
+		</style>
+		<script type="text/javascript">
+		//<![CDATA[
+		function initComparisons() {
+			var x, i;
+			x = document.getElementsByClassName("img-comp-overlay");
+			for (i = 0; i < x.length; i++) {
+				compareImages(x[i]);
+			}
+			
+			function compareImages(img) {
+				var slider, img, clicked = 0, w, h;
+				w = img.offsetWidth;
+				h = img.offsetHeight;
+				img.style.width = (w / 2) + "px";
+				slider = document.createElement("div");
+				slider.setAttribute("class", "img-comp-slider");
+				img.parentElement.insertBefore(slider, img);
+				slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
+				slider.style.left = (w / 2) - (slider.offsetWidth / 2) + "px";
+				slider.addEventListener("mousedown", slideReady);
+				window.addEventListener("mouseup", slideFinish);
+			
+				function slideReady(e) {
+					e.preventDefault();
+					clicked = 1;
+					window.addEventListener("mousemove", slideMove);
+				}
+				
+				function slideFinish() {
+					clicked = 0;
+				}
+				
+				function slideMove(e) {
+					var pos;
+					if (clicked == 0) return false;
+					pos = getCursorPos(e)
+					if (pos < 0) pos = 0;
+					if (pos > w) pos = w;
+					slide(pos);
+				}
+				
+				function getCursorPos(e) {
+					var a, x = 0;
+					e = (e.changedTouches) ? e.changedTouches[0] : e;
+					a = img.getBoundingClientRect();
+					x = e.pageX - a.left;
+					x = x - window.pageXOffset;
+					return x;
+				}
+				
+				function slide(x) {
+					img.style.width = x + "px";
+					slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
+				}
+			}
+		}
+		//]]>
+		</script>
+	</head>
+	<body>
+		<p><img src=".\firstrun\win8rpconv_logo.png" alt="Logo of program" /></p>
+		<h1>Hooray, it worked!</h1>
+		<p class="firstrun">Windows 8.1 has been successfully converted to Windows 8 Release Preview…</p>
+		<div class="img-comp-container">
+			<div class="img-comp-img">
+				<p><img src=".\firstrun\win8rp_desktop.png" alt="Desktop of Windows 8 Release Preview" width="300" height="170" /></p>
+			</div>
+			<div class="img-comp-img img-comp-overlay">
+				<p><img src=".\firstrun\win81_desktop.png" alt="Desktop of Windows 8.1" width="300" height="170" /></p>
+			</div>
+		</div>
+		<p><br /></p>
+		<p>Almost! This file opened in Internet Explorer so that you can enable Quero Toolbar at the bottom of the browser and replace the opaque address bar with the one from Quero.</p>
+		<p>To do that, click on the Quero button: <img src=".\firstrun\quero_button.png" alt="Quero Button" height="20" /> and go to <b>Options</b>. Set the toolbar to these settings here, in the <b>Settings</b> and <b>Appearance</b> tab:</p>
+		<p>
+			<img src=".\firstrun\quero_settings.png" alt="Quero\Settings" width="300" />
+			<img src=".\firstrun\quero_appearance.png" alt="Quero\Appearance" width="300" />
+		</p>
+		<p>You can enable the command bar by right-clicking on the address bar and enable it in the menu, so that the browser will look even better, as well as you can access all functions and settings directly. (recommended)</p>
+		<p><b>Enjoy your beautified “new” Windows 8.1 :)</b></p>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			initComparisons();
+		//]]>
+		</script>
+	</body>
+</html>
