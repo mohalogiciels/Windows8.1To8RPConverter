@@ -1,4 +1,6 @@
 # Windows 8.1 to Windows 8 Release Preview Converter
+or **Windows 8.1 to Windows 8 RP Converter**, or **Windows 8.1 to 8 RP Converter**
+
 <sup>made with Visual Basic .NET in Visual Studio 2012 in Windows 8.1</sub>
 
 <img width="570" height="152" alt="Win8RPConvLogoGithub" src="https://github.com/user-attachments/assets/f29a00e4-fc21-4727-9c3c-970088a326a3" />
@@ -9,6 +11,10 @@ This program applies the Windows 8 Release Preview theme to Windows 8.1, as well
 ➡️ **Download <code>setup_w8rpconv.exe</code> now: <a href="https://github.com/win8-png/win8rpconv/releases/latest">here</a>** ⬅️
 
 This file works on both 32-bit and 64-bit systems and recognises the platform automatically.
+
+Just choose your language first and follow the instructions on the screen to install it.
+
+⚠️  This program can’t be updated in-place. If you want to install a newer version, remove the old version first and launch the setup afterwards.
 
 ## Programs and modifications which can be installed
 * <a href="https://www.deviantart.com/yash12396/art/Windows-8-Release-Preview-VS-for-Windows-8-1-1-764774206">**Theme itself**</a> by yash12396 on DeviantArt
