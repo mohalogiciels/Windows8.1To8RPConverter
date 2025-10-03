@@ -8,7 +8,7 @@ or **Windows 8.1 to Windows 8 RP Converter**, or **Windows 8.1 to 8 RP Converter
 This program applies the Windows 8 Release Preview theme to Windows 8.1, as well as gives the choice to install programs and replacing some system files with original files of Windows 8 RP and RTM, to make it look almost like this version of Windows 8 with its native Aero interface and beautiful wallpapers. 😄
 
 ## Download
-➡️ **Download <code>setup_w8rpconv.exe</code> now: <a href="https://github.com/win8-png/win8rpconv/releases/latest">here</a>** ⬅️
+**Download the latest version now:** <a href="https://github.com/mohalogiciels/Windows8.1To8RPConverter/releases/latest">here</a>
 
 This file works on both 32-bit and 64-bit systems and recognises the platform automatically.
 
