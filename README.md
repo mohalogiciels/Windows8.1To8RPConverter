@@ -3,7 +3,9 @@ or **Windows 8.1 to Windows 8 RP Converter**, or **Windows 8.1 to 8 RP Converter
 
 <sup>made with Visual Basic .NET in Visual Studio 2012 in Windows 8.1</sub>
 
-<img width="570" height="152" alt="Win8RPConvLogoGithub" src="https://github.com/user-attachments/assets/f29a00e4-fc21-4727-9c3c-970088a326a3" />
+<p align="center">
+  <img width="570" height="152" alt="Win8RPConvLogoGithub" src="https://github.com/user-attachments/assets/f29a00e4-fc21-4727-9c3c-970088a326a3" />
+</p>
 
 This program applies the Windows 8 Release Preview theme to Windows 8.1, as well as gives the choice to install programs and replacing some system files with original files of Windows 8 RP and RTM, to make it look almost like this version of Windows 8 with its native Aero interface and beautiful wallpapers. 😄
 
