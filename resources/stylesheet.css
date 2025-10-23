@@ -1,0 +1,154 @@
+@charset "UTF-8";
+
+/** CSS file for XHTML files firstrun.xht and modify.xht
+ * Copyright © 2025 Moha Logiciels
+ * Webpage completely designed and hand-made by Moha Logiciels
+ ** Image Slider
+ * Copyright © 2025 Refsnes Data. All Rights Reserved.
+ * Credits: https://www.w3schools.com/about/about_copyright.asp
+ * Inspired by: W3Schools @ https://www.w3schools.com/howto/howto_js_image_comparison.asp
+ * and modified by: Moha Logiciels
+ */
+
+@font-face {
+	font-family: "Showcard Gothic";
+	src: url("SHOWG.TTF");
+	src: url("SHOWG.EOT");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@keyframes show {
+    from { opacity: 0%; }
+    to { opacity: 100%; }
+}
+
+* { box-sizing: border-box; }
+
+body {
+	background-image: url("wallpaper.jpg");
+	background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: lightblue;
+	overflow: hidden;
+	font-family: "Segoe UI", Arial, sans-serif;
+	text-align: center;
+}
+
+#window {
+	width: 800px;
+	height: 500px;
+	animation: show 0.5s;
+	border: 1px solid #395760;
+	box-shadow: 0px 0px 10px #000000;
+	left: 50%;
+	top: 50%;
+	position: absolute;
+	transform: translate(-50%, -50%);
+}
+
+#window-title-bar {
+	width: 100%;
+	height: 25px;
+	background-image: url("title_bar.png");
+}
+
+#window-title-bar-icon, #window-title, #window-controls {
+	height: 100%;
+	float: left;
+}
+
+#window-title-bar-icon, #window-controls { width: 20%; }
+
+#window-title-bar-icon { margin-left: 2px; }
+
+#window-title { width: 59.5%; }
+
+#window-title-bar-icon p, #window-title p, #close-button p {
+	margin: 0;
+	padding-top: 1px;
+	vertical-align: middle;
+}
+
+#window-title-bar-icon p { text-align: left; }
+
+#window-title p {
+	color: #000000;
+	text-shadow: 0px 0px 5px #FFFFFF;
+	text-align: center;
+}
+
+#close-button {
+	float: right;
+	width: 50px;
+	background-color: #FF7F7F;
+	border: 1px solid lightblue;
+}
+
+#close-button p {
+	color: #FFFFFF;
+	cursor: pointer;
+	font-family: "Showcard Gothic";
+	text-align: center;
+	text-shadow: -1px 0px 1px #000000, 0px 1px 1px #000000, 1px 0px 1px #000000, 0px -1px 1px #000000;
+}
+
+#content {
+	height: 95%;
+	background-image: url("background_blur.png");
+	overflow-y: scroll;
+}
+
+#content-index {
+	width: 95%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.logo img { filter: drop-shadow(0px 0px 5px lightblue); }
+
+h1, .firstrun, .enjoy, .enjoy-quero { text-shadow: 2px 2px 5px #000000; }
+
+.firstrun {
+	font-size: 20px;
+	font-weight: normal;
+}
+
+.almost { padding-top: 20px; }
+
+.enjoy { padding-top: 20px; }
+
+/* Code for Image Slider */
+
+.img-comp-container {
+	position: relative;
+	height: 170px;
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.img-comp-img {
+	width: auto;
+	height: auto;
+	overflow: hidden;
+	position: absolute;
+}
+
+.img-comp-img img {
+	display: block;
+	vertical-align: middle;
+}
+
+.img-comp-slider {
+	width: 40px;
+	height: 40px;
+	background-color: #2196F3;
+	border-radius: 50%;
+	cursor: ew-resize;
+	opacity: 70%;
+	position: absolute;
+	z-index: 9;
+}
