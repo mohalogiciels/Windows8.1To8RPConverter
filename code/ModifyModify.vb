@@ -1520,10 +1520,10 @@ Public Class ModifyModify
         End If
 
         ' If theme change needed and restart not needed, change to Windows 8 RP theme now
-        If ModifyWizard.ProgLanguage = "en-GB" Then
-            ActionLabel.Text = "Finalising modifications..."
-        ElseIf ModifyWizard.ProgLanguage = "en-US" Then
+        If ModifyWizard.ProgLanguage = "en-US" Then
             ActionLabel.Text = "Finalizing modifications..."
+        Else
+            ActionLabel.Text = "Finalising modifications..."
         End If
         ActionLabel.Refresh()
         If ModifyWizard.IsRestartNeeded = False And ModifyWizard.IsThemeChangeNeeded = True Then

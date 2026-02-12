@@ -997,9 +997,9 @@ Public Class SetupInstall
         End If
 
         ' Finalising installation
-        If SetupWizard.ProgLanguage = "en-GB" Then
-            ActionLabel.Text = "Finalising installation..."
-        ElseIf SetupWizard.ProgLanguage = "en-US" Then
+        If SetupWizard.ProgLanguage = "en-US" Then
+            ActionLabel.Text = "Finalizing installation..."
+        Else
             ActionLabel.Text = "Finalizing installation..."
         End If
         ActionLabel.Refresh()
