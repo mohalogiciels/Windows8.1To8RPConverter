@@ -1,4 +1,4 @@
-﻿Imports Microsoft.Win32
+Imports Microsoft.Win32
 Imports System.Configuration
 Imports System.IO
 Imports System.Globalization
@@ -154,13 +154,9 @@ Public Class SetupWizard
             IsSelectedLanguageDisplayLanguage = False
         End If
 
-        ' Load program when locale exists
-        If ProgLanguage.StartsWith("en") Or ProgLanguage = "fr-FR" Then
-            Me.Hide()
-            SetupWelcome.Show()
-        Else
-            MessageBox.Show("Not available yet!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
+        ' Load program finally
+        Me.Hide()
+        SetupWelcome.Show()
     End Sub
 
     Private Sub CancelButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
