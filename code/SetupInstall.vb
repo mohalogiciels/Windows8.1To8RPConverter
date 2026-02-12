@@ -1000,7 +1000,7 @@ Public Class SetupInstall
         If SetupWizard.ProgLanguage = "en-US" Then
             ActionLabel.Text = "Finalizing installation..."
         Else
-            ActionLabel.Text = "Finalizing installation..."
+            ActionLabel.Text = "Finalising installation..."
         End If
         ActionLabel.Refresh()
         DetailsTextBox.AppendText(ActionLabel.Text & vbCrLf)
@@ -1146,4 +1146,5 @@ Public Class SetupInstall
             End If
         End If
     End Sub
+
 End Class
