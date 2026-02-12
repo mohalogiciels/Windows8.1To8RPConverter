@@ -1,6 +1,6 @@
-﻿Public Class SetupOptionsInstallUXTHelpEnglish
+﻿Public Class SetupOptionsInstallUXTHelp
 
-    Private Sub SetupOptionsInstallUXTHelpEnglish_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub SetupOptionsInstallUXTHelp_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Me.Dispose()
     End Sub
 

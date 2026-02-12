@@ -1,6 +1,6 @@
-﻿Public Class SetupOptionsInstallONEHelpEnglish
+﻿Public Class SetupOptionsInstallONEHelp
 
-    Private Sub SetupOptionsInstallONEHelpEnglish_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub SetupOptionsInstallONEHelp_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Me.Dispose()
     End Sub
 

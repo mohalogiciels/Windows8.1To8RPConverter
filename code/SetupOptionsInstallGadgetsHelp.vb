@@ -1,6 +1,6 @@
-﻿Public Class SetupOptionsInstallGadgetsHelpEnglish
+﻿Public Class SetupOptionsInstallGadgetsHelp
 
-    Private Sub SetupOptionsInstallGadgetsHelpEnglish_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub SetupOptionsInstallGadgetsHelp_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Me.Dispose()
     End Sub
 

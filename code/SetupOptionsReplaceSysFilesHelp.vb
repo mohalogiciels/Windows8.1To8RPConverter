@@ -1,6 +1,6 @@
-﻿Public Class SetupOptionsReplaceSysFilesHelpEnglish
+﻿Public Class SetupOptionsReplaceSysFilesHelp
 
-    Private Sub SetupOptionsReplaceSysFilesHelpEnglish_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub SetupOptionsReplaceSysFilesHelp_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Me.Dispose()
     End Sub
 
