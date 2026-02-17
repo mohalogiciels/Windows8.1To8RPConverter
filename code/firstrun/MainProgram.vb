@@ -8,14 +8,14 @@ Public Class MainProgram
     Dim WinDir As String = Environment.GetFolderPath(Environment.SpecialFolder.Windows)
 
     Private Sub MainProgram_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If Command.Length = 0 Then
+        If Command.Length = 0 Or Not (Command.Contains("/setup") Or Command.Contains("/modify")) Then
             MessageBox.Show("This program should be opened with at least one argument!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Me.Close()
+            Application.Exit()
         End If
 
         If Commands.Count = 1 And Commands.Contains("/modify") Then
             MessageBox.Show("Not sufficient commands to run this program!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Me.Close()
+            Application.Exit()
         End If
     End Sub
 
