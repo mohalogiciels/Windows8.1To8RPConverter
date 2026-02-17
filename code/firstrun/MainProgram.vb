@@ -2,18 +2,18 @@
 Imports System.Xml
 
 Public Class MainProgram
-    Dim Commands As String() = Command.Split(" ")
+    Dim Arguments As String() = Command.ToLower.Split(" ")
     Dim ProgramFiles As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
     Dim ProgDir As String = ProgramFiles & "\Windows 8.1 to 8 RP Converter"
     Dim WinDir As String = Environment.GetFolderPath(Environment.SpecialFolder.Windows)
 
     Private Sub MainProgram_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If Command.Length = 0 Or Not (Command.Contains("/setup") Or Command.Contains("/modify")) Then
+        If Arguments.Length = 0 Or Not (Arguments.Contains("/setup") Or Arguments.Contains("/modify")) Then
             MessageBox.Show("This program should be opened with at least one argument!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Application.Exit()
         End If
 
-        If Commands.Count = 1 And Commands.Contains("/modify") Then
+        If Arguments.Count = 1 And Arguments.Contains("/modify") Then
             MessageBox.Show("Not sufficient commands to run this program!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Application.Exit()
         End If
@@ -26,7 +26,7 @@ Public Class MainProgram
         ' /quero: Run modify.xht in IE when Quero installed with modify
         ' /applytheme: Apply the theme after reboot if required
         ' /sounds: Apply theme with sound scheme
-        RunToolsAndFiles(Commands)
+        RunToolsAndFiles(Arguments)
     End Sub
 
     Private Sub Wait(ByVal Seconds As Integer)
@@ -39,11 +39,11 @@ Public Class MainProgram
     Private Sub InitialiseProgressBar()
         Dim ProgBarCounter As Integer = 0
         ' If theme should be applied
-        If Commands.Contains("/setup") Or (Commands.Contains("/modify") And Commands.Contains("/applytheme")) Then
+        If Arguments.Contains("/setup") Or (Arguments.Contains("/modify") And Arguments.Contains("/applytheme")) Then
             ProgBarCounter += 10
         End If
         ' If firstrun document should be opened
-        If Commands.Contains("/setup") Or (Commands.Contains("/modify") And Commands.Contains("/quero")) Then
+        If Arguments.Contains("/setup") Or (Arguments.Contains("/modify") And Arguments.Contains("/quero")) Then
             ProgBarCounter += 10
         End If
 
@@ -56,13 +56,13 @@ Public Class MainProgram
         End With
     End Sub
 
-    Private Sub RunToolsAndFiles(ByVal CommandArray As String())
+    Private Sub RunToolsAndFiles(ByVal ArgumentsArray As String())
         ' Apply theme to system
-        If CommandArray.Contains("/setup") Or (CommandArray.Contains("/modify") And CommandArray.Contains("/applytheme")) Then
+        If ArgumentsArray.Contains("/setup") Or (ArgumentsArray.Contains("/modify") And ArgumentsArray.Contains("/applytheme")) Then
             StatusLabel.Text = "Applying theme to system..."
             StatusLabel.Refresh()
             Using ApplyTheme As New Process
-                If CommandArray.Contains("/sounds") Then
+                If ArgumentsArray.Contains("/sounds") Then
                     With ApplyTheme
                         .StartInfo.FileName = WinDir & "\Resources\Themes\aerorp_sounds.theme"
                         .Start()
@@ -80,15 +80,15 @@ Public Class MainProgram
         End If
 
         ' Run firstrun.xht/modify.xht document in Internet Explorer
-        If CommandArray.Contains("/setup") Or (CommandArray.Contains("/modify") And CommandArray.Contains("/quero")) Then
+        If ArgumentsArray.Contains("/setup") Or (ArgumentsArray.Contains("/modify") And ArgumentsArray.Contains("/quero")) Then
             StatusLabel.Text = "Open firstrun file in Internet Explorer..."
             StatusLabel.Refresh()
             Using RunFirstrunInIeProcess As New Process
                 With RunFirstrunInIeProcess
                     .StartInfo.FileName = ProgramFiles & "\Internet Explorer\iexplore.exe"
-                    If CommandArray.Contains("/setup") Then
+                    If ArgumentsArray.Contains("/setup") Then
                         .StartInfo.Arguments = """" & ProgDir & "\firstrun.xht"""
-                    ElseIf CommandArray.Contains("/modify") Then
+                    ElseIf ArgumentsArray.Contains("/modify") Then
                         .StartInfo.Arguments = """" & ProgDir & "\modify.xht"""
                     End If
                     .Start()
