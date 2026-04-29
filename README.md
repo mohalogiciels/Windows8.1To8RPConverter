@@ -1,7 +1,7 @@
 # Windows 8.1 to Windows 8 Release Preview Converter
 <sup>**Windows 8.1 to Windows 8 RP Converter**/**Windows 8.1 to 8 RP Converter**</sup>
 
-<sup>made with Visual Basic .NET in Visual Studio 2012 in Windows 8.1</sub>
+<sup>made with Visual Basic .NET in Visual Studio 2013 in Windows 8.1</sub>
 
 <p align="center">
   <img width="570" height="152" alt="Win8RPConvLogoGithub" src="https://github.com/user-attachments/assets/f29a00e4-fc21-4727-9c3c-970088a326a3" />
