@@ -3,7 +3,7 @@
 Public Class ModifyOptions
     Dim ProgramFiles As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
     Dim ProgramFilesX86 As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
-    Dim RestartCount As Integer
+    Dim RestartCount As Integer = 0
 
     Private Sub ModifyOptionsEnglish_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitialiseOptions()
@@ -176,7 +176,7 @@ Public Class ModifyOptions
     End Sub
 
     Private Sub CloseButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
-        Me.Close()
+        Application.Exit()
     End Sub
 
     Private Sub ChangeONECheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles ChangeONECheckBox.CheckedChanged
@@ -290,12 +290,10 @@ Public Class ModifyOptions
     End Sub
 
     Private Sub ModifyOptionsEnglish_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If e.CloseReason = CloseReason.UserClosing Then
-            If MessageBox.Show("Are you sure you want to cancel? This program will be closed.", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = System.Windows.Forms.DialogResult.Yes Then
-                ModifyWizard.Close()
-            ElseIf System.Windows.Forms.DialogResult.No Then
-                e.Cancel = True
-            End If
+        If MessageBox.Show("Are you sure you want to cancel? This program will be closed.", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = System.Windows.Forms.DialogResult.Yes Then
+            Application.Exit()
+        ElseIf System.Windows.Forms.DialogResult.No Then
+            e.Cancel = True
         End If
     End Sub
 End Class

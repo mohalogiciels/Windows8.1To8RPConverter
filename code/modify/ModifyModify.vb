@@ -14,7 +14,7 @@ Public Class ModifyModify
     Dim IsFinished As Boolean = False
     Dim ProgBarCounter As Integer = 0
 
-    Private Sub ModifyModifyEnglish_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+    Private Sub ModifyModify_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         ' Set progress bar to marquee
         With ProgressBarMod
             .Style = ProgressBarStyle.Marquee
@@ -30,14 +30,14 @@ Public Class ModifyModify
 
         ' Check if theme change is needed
         If ModifyWizard.IsThemeChangeNeeded = True Or ModifyWizard.ChangeUXMethodChecked = True Then
-            '' Change theme now
+            ' Change theme now
             Me.TopMost = True
             BgWorker.RunWorkerAsync("ChangeToDefaultTheme")
             Wait(5)
             Me.TopMost = False
             ModifyLauncher()
         Else
-            '' Start modifying without theme change
+            ' Start modifying without theme change
             ModifyLauncher()
         End If
     End Sub
@@ -98,7 +98,7 @@ Public Class ModifyModify
         Dim WhatToDo As String = Convert.ToString(e.Argument)
         Select Case WhatToDo
             Case "ChangeToDefaultTheme"
-                '' Change to standard theme
+                ' Change to standard theme
                 Using ThemeChangeProcess As New Process
                     With ThemeChangeProcess
                         .StartInfo.FileName = WinDir & "\Resources\Themes\aero.theme"
@@ -106,7 +106,7 @@ Public Class ModifyModify
                     End With
                 End Using
             Case "CloseExplorer"
-                '' Close explorer.exe
+                ' Close explorer.exe
                 Using EndExplorerTask As New Process
                     With EndExplorerTask
                         .StartInfo.FileName = WinDir & "\System32\taskkill.exe"
@@ -120,7 +120,7 @@ Public Class ModifyModify
                 Dim SourcePathONE As String = ResFolder & "\OldNewExplorer"
                 Dim DestinationPathONE As String = ProgramFiles & "\OldNewExplorer"
                 If ModifyWizard.ModifyInstallONE = False Then
-                    '' Uninstall OldNewExplorer
+                    ' Uninstall OldNewExplorer
                     If ActionLabel.InvokeRequired Then
                         ActionLabel.Invoke(Sub()
                                                ActionLabel.Text = "Removing OldNewExplorer..."
@@ -130,7 +130,7 @@ Public Class ModifyModify
                         ActionLabel.Text = "Removing OldNewExplorer..."
                         ActionLabel.Refresh()
                     End If
-                    '' Unreg OldNewExplorer DLLs
+                    ' Unreg OldNewExplorer DLLs
                     If ModifyWizard.BitnessSystem = "64Bit" Then
                         Using UninstONE As New Process
                             With UninstONE
@@ -171,7 +171,7 @@ Public Class ModifyModify
                         ActionLabel.Refresh()
                     End If
                 Else
-                    '' Install OldNewExplorer
+                    ' Install OldNewExplorer
                     If ActionLabel.InvokeRequired Then
                         ActionLabel.Invoke(Sub()
                                                ActionLabel.Text = "Installing OldNewExplorer..."
@@ -200,7 +200,7 @@ Public Class ModifyModify
                             .WaitForExit()
                         End With
                     End Using
-                    '' Create shortcut on desktop
+                    ' Create shortcut on desktop
                     Using ObjectShell As Object = CreateObject("WScript.Shell")
                         Using ObjectLink As Object = ObjectShell.CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) & "\OldNewExplorer Configuration.lnk")
                             Try
@@ -236,7 +236,7 @@ Public Class ModifyModify
                 End If
             Case "ChangeUXMethod"
                 If ModifyWizard.ModifyChangeToUXMethod = "UXTSB" Then
-                    '' Uninstall UltraUX
+                    ' Uninstall UltraUX
                     If ActionLabel.InvokeRequired Then
                         ActionLabel.Invoke(Sub()
                                                ActionLabel.Text = "Uninstalling UltraUXThemePatcher..."
@@ -257,7 +257,7 @@ Public Class ModifyModify
                             .WaitForExit()
                         End With
                     End Using
-                    '' WaitForExit for process called Un.exe because Uninstall.exe closes
+                    ' WaitForExit for process called Un.exe because Uninstall.exe closes
                     Do
                         Application.DoEvents()
                     Loop Until Process.GetProcessesByName("Un").Count = 0
@@ -279,7 +279,7 @@ Public Class ModifyModify
                         ActionLabel.Text = "UltraUXThemePatcher has been uninstalled!"
                         ActionLabel.Refresh()
                     End If
-                    '' Install UXTSB
+                    ' Install UXTSB
                     If ActionLabel.InvokeRequired Then
                         ActionLabel.Invoke(Sub()
                                                ActionLabel.Text = "Installing UXThemeSignatureBypass..."
@@ -295,7 +295,7 @@ Public Class ModifyModify
                     ElseIf ModifyWizard.BitnessSystem = "32Bit" Then
                         FileIO.FileSystem.CopyFile(ResFolder & "\UXThemeDLL\UxThemeSignatureBypass32.dll", WinDir & "\System32\UxThemeSignatureBypass.dll")
                     End If
-                    '' UXTSB set registry key to load file with Windows
+                    ' UXTSB -> set registry key to load file with Windows
                     Using RegKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows", True)
                         If RegKey.GetValue("AppInit_DLLs") <> String.Empty Then
                             RegKey.SetValue("AppInit_DLLs", RegKey.GetValue("AppInit_DLLs") & ", " & WinDir & "\System32\UxThemeSignatureBypass.dll")
@@ -307,7 +307,7 @@ Public Class ModifyModify
                         End If
                         RegKey.Close()
                     End Using
-                    '' UXTSB\Registry\SysWOW64
+                    ' UXTSB\Registry\SysWOW64
                     If ModifyWizard.BitnessSystem = "64Bit" Then
                         Using RegKey32 As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Windows", True)
                             If RegKey32.GetValue("AppInit_DLLs") <> String.Empty Then
@@ -349,7 +349,7 @@ Public Class ModifyModify
                         ActionLabel.Text = "Removing UXThemeSignatureBypass..."
                         ActionLabel.Refresh()
                     End If
-                    '' Removing UXTSB after reboot
+                    ' Removing UXTSB after reboot
                     Using RegKeyDelete As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Session Manager", True)
                         If RegKeyDelete.GetValue("PendingFileRenameOperations") IsNot Nothing Or RegKeyDelete.GetValue("PendingFileRenameOperations") <> String.Empty Then
                             Dim RegKeyValue As String() = RegKeyDelete.GetValue("PendingFileRenameOperations")
@@ -372,7 +372,7 @@ Public Class ModifyModify
                         End If
                         RegKeyDelete.Close()
                     End Using
-                    '' UXTSB -> remove registry key to load file with Windows
+                    ' UXTSB -> remove registry key to load file with Windows
                     Using RegKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows", True)
                         Dim AppInitLoad As String = RegKey.GetValue("AppInit_DLLs")
                         Dim AppInitKeyList As List(Of String) = AppInitLoad.Split(",").ToList
@@ -390,7 +390,7 @@ Public Class ModifyModify
                             RegKey.Close()
                         End If
                     End Using
-                    '' UXTSB\Registry\SysWOW64
+                    ' UXTSB\Registry\SysWOW64
                     If ModifyWizard.BitnessSystem = "64Bit" Then
                         Using RegKey32 As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Windows", True)
                             Dim AppInitLoad32 As String = RegKey32.GetValue("AppInit_DLLs")
@@ -428,7 +428,7 @@ Public Class ModifyModify
                         ActionLabel.Text = "UXThemeSignatureBypass has been removed!"
                         ActionLabel.Refresh()
                     End If
-                    '' Install UltraUXThemePatcher
+                    ' Install UltraUXThemePatcher
                     If ActionLabel.InvokeRequired Then
                         ActionLabel.Invoke(Sub()
                                                ActionLabel.Text = "Installing UltraUXThemePatcher..."
@@ -475,13 +475,13 @@ Public Class ModifyModify
                         ActionLabel.Text = "Installing Quero Toolbar..."
                         ActionLabel.Refresh()
                     End If
-                    '' Change install directory to ProgramFiles folder
+                    ' Change install directory to ProgramFiles folder
                     Dim QueroSetupInfFilePath As String = ResFolder & "\Quero\settings.inf"
                     Dim QueroSetupInfFile As String() = File.ReadAllLines(QueroSetupInfFilePath)
                     QueroSetupInfFile(2) = "Dir=" & ProgramFiles & "\Quero Toolbar"
                     File.WriteAllLines(QueroSetupInfFilePath, QueroSetupInfFile)
                     Erase QueroSetupInfFile
-                    '' Start Quero Toolbar setup
+                    ' Start Quero Toolbar setup
                     Using QueroSetup As New Process
                         With QueroSetup
                             If ModifyWizard.BitnessSystem = "64Bit" Then
@@ -523,7 +523,7 @@ Public Class ModifyModify
                         ActionLabel.Text = "Uninstalling Quero Toolbar..."
                         ActionLabel.Refresh()
                     End If
-                    '' Restore address bar of Internet Explorer
+                    ' Restore address bar of Internet Explorer
                     Using HklmIENoNavBar As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions", True)
                         If HklmIENoNavBar IsNot Nothing Then
                             If HklmIENoNavBar.GetValue("NoNavBar") IsNot Nothing Then
@@ -540,7 +540,7 @@ Public Class ModifyModify
                             HkcuIENoNavBar.Close()
                         End If
                     End Using
-                    '' Run uninstaller
+                    ' Run uninstaller
                     Using QueroUninst As New Process
                         With QueroUninst
                             .StartInfo.FileName = ProgramFiles & "\Quero Toolbar\unins000.exe"
@@ -573,7 +573,7 @@ Public Class ModifyModify
                 Dim EveryoneAuditRule As FileSystemAuditRule = New FileSystemAuditRule(EveryoneSidAsUserName, FileSystemRights.CreateFiles + FileSystemRights.CreateDirectories + FileSystemRights.WriteAttributes + FileSystemRights.WriteExtendedAttributes + FileSystemRights.Delete + FileSystemRights.ChangePermissions + FileSystemRights.TakeOwnership, AuditFlags.Success + AuditFlags.Failure)
                 Dim UiRibbonAuditRules As FileSecurity = Nothing
                 If ModifyWizard.ModifyInstallSysFiles = False Then
-                    '' Restore system files
+                    ' Restore system files
                     If ActionLabel.InvokeRequired Then
                         ActionLabel.Invoke(Sub()
                                                ActionLabel.Text = "Restoring UIRibbon.dll && UIRibbonRes.dll..."
@@ -583,7 +583,7 @@ Public Class ModifyModify
                         ActionLabel.Text = "Restoring UIRibbon.dll && UIRibbonRes.dll..."
                         ActionLabel.Refresh()
                     End If
-                    '' Check if backup files exist
+                    ' Check if backup files exist
                     If ModifyWizard.BitnessSystem = "64Bit" Then
                         If Not FileIO.FileSystem.FileExists(WinDir & "\System32\UIRibbon.dll.bak") Or Not FileIO.FileSystem.FileExists(WinDir & "\System32\UIRibbonRes.dll.bak") Or Not FileIO.FileSystem.FileExists(WinDir & "\System32\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui.bak") Or Not FileIO.FileSystem.FileExists(WinDir & "\SysWOW64\UIRibbon.dll.bak") Or Not FileIO.FileSystem.FileExists(WinDir & "\SysWOW64\UIRibbonRes.dll.bak") Or Not FileIO.FileSystem.FileExists(WinDir & "\SysWOW64\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui.bak") Then
                             MessageBox.Show("One or more backup files could not be found on this system! Skipping restore of system files...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -613,7 +613,7 @@ Public Class ModifyModify
                             Exit Select
                         End If
                     End If
-                    '' Restore files now
+                    ' Restore files now
                     Dim SysFilesSetup As New Process
                     With SysFilesSetup
                         .StartInfo.FileName = WinDir & "\System32\takeown.exe"
@@ -705,7 +705,7 @@ Public Class ModifyModify
                     End With
                     FileIO.FileSystem.DeleteFile(WinDir & "\System32\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui")
                     FileIO.FileSystem.RenameFile(WinDir & "\System32\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui.bak", "UIRibbon.dll.mui")
-                    '' Original files -> change to original FileSystemSecurity
+                    ' Original files -> change to original FileSystemSecurity
                     With SysFilesSetup
                         .StartInfo.FileName = WinDir & "\System32\icacls.exe"
                         .StartInfo.Arguments = WinDir & "\System32\UIRibbon.dll /setowner ""NT SERVICE\TrustedInstaller"""
@@ -781,7 +781,7 @@ Public Class ModifyModify
                     UiRibbonAuditRules.SetAuditRule(EveryoneAuditRule)
                     File.SetAccessControl(WinDir & "\System32\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui", UiRibbonAuditRules)
                     UiRibbonAuditRules = Nothing
-                    '' If System is 64-bit, repeat for files in SysWOW64
+                    ' If System is 64-bit, repeat for files in SysWOW64
                     If ModifyWizard.BitnessSystem = "64Bit" Then
                         With SysFilesSetup
                             .StartInfo.FileName = WinDir & "\System32\takeown.exe"
@@ -873,7 +873,7 @@ Public Class ModifyModify
                         End With
                         FileIO.FileSystem.DeleteFile(WinDir & "\SysWOW64\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui")
                         FileIO.FileSystem.RenameFile(WinDir & "\SysWOW64\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui.bak", "UIRibbon.dll.mui")
-                        '' Original files in SysWOW64 -> change to original FileSystemSecurity
+                        ' Original files in SysWOW64 -> change to original FileSystemSecurity
                         With SysFilesSetup
                             .StartInfo.FileName = WinDir & "\System32\icacls.exe"
                             .StartInfo.Arguments = WinDir & "\SysWOW64\UIRibbon.dll /setowner ""NT SERVICE\TrustedInstaller"""
@@ -970,7 +970,7 @@ Public Class ModifyModify
                         ActionLabel.Refresh()
                     End If
                 Else
-                    '' Replace system files
+                    ' Replace system files
                     If ActionLabel.InvokeRequired Then
                         ActionLabel.Invoke(Sub()
                                                ActionLabel.Text = "Replacing UIRibbon.dll && UIRibbonRes.dll..."
@@ -980,7 +980,7 @@ Public Class ModifyModify
                         ActionLabel.Text = "Replacing UIRibbon.dll && UIRibbonRes.dll..."
                         ActionLabel.Refresh()
                     End If
-                    '' Replace the files UIRibbon.dll, UIRibbonRes.dll and <UILanguage>\UIRibbon.dll.mui
+                    ' Replace the files UIRibbon.dll, UIRibbonRes.dll and <UILanguage>\UIRibbon.dll.mui
                     Dim SourcePathSysFiles As String = ResFolder & "\UIRibbon"
                     Dim SysFilesSetup As New Process
                     With SysFilesSetup
@@ -1037,7 +1037,7 @@ Public Class ModifyModify
                         FileIO.FileSystem.CopyFile(SourcePathSysFiles & "\syswow64\UIRibbonRes.dll", WinDir & "\System32\UIRibbonRes.dll")
                         FileIO.FileSystem.CopyFile(SourcePathSysFiles & "\syswow64\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui", WinDir & "\System32\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui")
                     End If
-                    '' New files -> change to original FileSystemSecurity
+                    ' New files -> change to original FileSystemSecurity
                     With SysFilesSetup
                         .StartInfo.FileName = WinDir & "\System32\icacls.exe"
                         .StartInfo.Arguments = WinDir & "\System32\UIRibbon.dll /setowner ""NT SERVICE\TrustedInstaller"""
@@ -1113,7 +1113,7 @@ Public Class ModifyModify
                     UiRibbonAuditRules.SetAuditRule(EveryoneAuditRule)
                     File.SetAccessControl(WinDir & "\System32\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui", UiRibbonAuditRules)
                     UiRibbonAuditRules = Nothing
-                    '' If System is 64-bit, repeat for files in SysWOW64
+                    ' If System is 64-bit, repeat for files in SysWOW64
                     If ModifyWizard.BitnessSystem = "64Bit" Then
                         With SysFilesSetup
                             .StartInfo.FileName = WinDir & "\System32\takeown.exe"
@@ -1163,7 +1163,7 @@ Public Class ModifyModify
                         FileIO.FileSystem.CopyFile(SourcePathSysFiles & "\syswow64\UIRibbon.dll", WinDir & "\SysWOW64\UIRibbon.dll")
                         FileIO.FileSystem.CopyFile(SourcePathSysFiles & "\syswow64\UIRibbonRes.dll", WinDir & "\SysWOW64\UIRibbonRes.dll")
                         FileIO.FileSystem.CopyFile(SourcePathSysFiles & "\syswow64\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui", WinDir & "\SysWOW64\" & ModifyWizard.ProgLanguage & "\UIRibbon.dll.mui")
-                        '' New files in SysWOW64 -> change to original FileSystemSecurity
+                        ' New files in SysWOW64 -> change to original FileSystemSecurity
                         With SysFilesSetup
                             .StartInfo.FileName = WinDir & "\System32\icacls.exe"
                             .StartInfo.Arguments = WinDir & "\SysWOW64\UIRibbon.dll /setowner ""NT SERVICE\TrustedInstaller"""
@@ -1354,7 +1354,7 @@ Public Class ModifyModify
                             .WaitForExit()
                         End With
                     End Using
-                    '' Apply settings with registry file 7TaskTw.reg
+                    ' Apply settings with registry file 7TaskTw.reg
                     Using ApplyRegFile As New Process
                         With ApplyRegFile
                             .StartInfo.FileName = WinDir & "\System32\reg.exe"
@@ -1415,7 +1415,7 @@ Public Class ModifyModify
                     End If
                 End If
             Case "StartExplorer"
-                '' Start explorer with userinit.exe after changing system files
+                ' Start explorer with userinit.exe after changing system files
                 Using StartExplorerTask As New Process
                     With StartExplorerTask
                         .StartInfo.FileName = WinDir & "\System32\userinit.exe"
@@ -1555,18 +1555,18 @@ Public Class ModifyModify
                 End Using
             End If
             Using AutorunRegKey As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\RunOnce", True)
-                AutorunRegKey.SetValue("Run firstrun.exe", """" & ModifyWizard.ProgDir & "\firstrun.exe"" /modify", RegistryValueKind.String)
+                AutorunRegKey.SetValue("Run firstrun.exe", """" & ModifyWizard.ProgDir & "\firstrun.exe"" /MODIFY", RegistryValueKind.String)
                 If ModifyWizard.IsThemeChangeNeeded = True Or ModifyWizard.ChangeUXMethodChecked = True Then
-                    '' If theme or UXTheme patcher changed then autostart theme change after reboot
+                    ' If theme or UXTheme patcher changed then autostart theme change after reboot
                     If ModifyWizard.InstSounds = True Or ModifyWizard.InstallSoundsChecked = True Then
-                        AutorunRegKey.SetValue("Run firstrun.exe", AutorunRegKey.GetValue("Run firstrun.exe") & " /applytheme /sounds")
+                        AutorunRegKey.SetValue("Run firstrun.exe", AutorunRegKey.GetValue("Run firstrun.exe") & " /APPLYTHEME /SOUNDS")
                     Else
-                        AutorunRegKey.SetValue("Run firstrun.exe", AutorunRegKey.GetValue("Run firstrun.exe") & " /applytheme")
+                        AutorunRegKey.SetValue("Run firstrun.exe", AutorunRegKey.GetValue("Run firstrun.exe") & " /APPLYTHEME")
                     End If
                 End If
-                '' If restart needed and Quero installed, run modify.xht with autostart
+                ' If restart needed and Quero installed, run modify.xht with autostart
                 If ModifyWizard.ChangeQueroChecked = True And ModifyWizard.ModifyInstallQuero = True Then
-                    AutorunRegKey.SetValue("Run firstrun.exe", AutorunRegKey.GetValue("Run firstrun.exe") & " /quero")
+                    AutorunRegKey.SetValue("Run firstrun.exe", AutorunRegKey.GetValue("Run firstrun.exe") & " /QUERO")
                 End If
                 AutorunRegKey.Close()
             End Using
@@ -1577,61 +1577,62 @@ Public Class ModifyModify
         ' Finishing modifications
         ActionLabel.Text = "Modification(s) has/have been successfully completed!"
         ActionLabel.Refresh()
-        '' Change Next button and mark setup as finished
+        ' Change Next button and mark setup as finished
         NextButton.Text = "&Finish"
         NextButton.Enabled = True
         IsFinished = True
     End Sub
 
     Private Sub NextButton_Click(sender As Object, e As EventArgs) Handles NextButton.Click
-        Me.Close()
+        Application.Exit()
     End Sub
 
     Private Sub ModifyModify_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If IsFinished = False Then
-            MessageBox.Show("The setup cannot be finished right now.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        ElseIf IsFinished = True Then
-            If e.CloseReason = CloseReason.UserClosing Then
-                If ModifyWizard.IsRestartNeeded = True Then
-                    '' Delete OldNewExplorer directory after reboot when uninstalled
-                    If ModifyWizard.ChangeONEChecked = True And ModifyWizard.ModifyInstallONE = False Then
-                        Using DeleteFilesRegKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce", True)
-                            DeleteFilesRegKey.SetValue("Remove OldNewExplorer", """" & WinDir & "\System32\cmd.exe"" /c ""rmdir /s /q """ & ProgramFiles & "\OldNewExplorer""""")
-                            DeleteFilesRegKey.Close()
-                        End Using
-                    End If
-                    '' Restart prompt
-                    If MessageBox.Show("You need to restart your system to finish the modification(s). Do you want to restart now?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = System.Windows.Forms.DialogResult.Yes Then
-                        Using ShutDownProcess As New Process
-                            With ShutDownProcess
-                                .StartInfo.FileName = WinDir & "\System32\shutdown.exe"
-                                .StartInfo.Arguments = "/r /t 3"
-                                .StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                                .Start()
-                            End With
-                        End Using
-                        ModifyWizard.Close()
-                    ElseIf System.Windows.Forms.DialogResult.No Then
-                        ModifyWizard.Close()
-                    End If
-                Else
-                    '' Start explorer.exe
-                    BgWorker.RunWorkerAsync("StartExplorer")
-                    WaitUntilTaskFinishes()
-                    '' Open modify.xht in Internet Explorer
-                    If ModifyWizard.ChangeQueroChecked = True And ModifyWizard.ModifyInstallQuero = True Then
-                        Dim ResFolder As String = ModifyWizard.ProgDir & "\res"
-                        Using RunModifyXhtmlDocument As New Process
-                            With RunModifyXhtmlDocument
-                                .StartInfo.FileName = ProgramFiles & "\Internet Explorer\iexplore.exe"
-                                .StartInfo.Arguments = """" & ResFolder & "\modify.xht"""
-                                .Start()
-                            End With
-                        End Using
-                    End If
-                    ModifyWizard.Close()
+        If IsFinished = True Then
+            If ModifyWizard.IsRestartNeeded = True Then
+                ' Delete OldNewExplorer directory after reboot when uninstalled
+                If ModifyWizard.ChangeONEChecked = True And ModifyWizard.ModifyInstallONE = False Then
+                    Using DeleteFilesRegKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce", True)
+                        DeleteFilesRegKey.SetValue("Remove OldNewExplorer", """" & WinDir & "\System32\cmd.exe"" /c ""rmdir /s /q """ & ProgramFiles & "\OldNewExplorer""""")
+                        DeleteFilesRegKey.Close()
+                    End Using
                 End If
+                ' Restart prompt
+                If MessageBox.Show("You need to restart your system to finish the modification(s). Do you want to restart now?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = System.Windows.Forms.DialogResult.Yes Then
+                    Using ShutDownProcess As New Process
+                        With ShutDownProcess
+                            .StartInfo.FileName = WinDir & "\System32\shutdown.exe"
+                            .StartInfo.Arguments = "/r /t 3"
+                            .StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                            .Start()
+                        End With
+                    End Using
+                    Application.Exit()
+                    Exit Sub
+                ElseIf System.Windows.Forms.DialogResult.No Then
+                    Application.Exit()
+                    Exit Sub
+                End If
+            Else
+                ' Start explorer.exe
+                BgWorker.RunWorkerAsync("StartExplorer")
+                WaitUntilTaskFinishes()
+                ' Open modify.xht in Internet Explorer
+                If ModifyWizard.ChangeQueroChecked = True And ModifyWizard.ModifyInstallQuero = True Then
+                    Dim ResFolder As String = ModifyWizard.ProgDir & "\res"
+                    Using RunModifyXhtmlDocument As New Process
+                        With RunModifyXhtmlDocument
+                            .StartInfo.FileName = ProgramFiles & "\Internet Explorer\iexplore.exe"
+                            .StartInfo.Arguments = """" & ResFolder & "\modify.xht"""
+                            .Start()
+                        End With
+                    End Using
+                End If
+                Application.Exit()
+                Exit Sub
             End If
+        Else
+            MessageBox.Show("The setup cannot be finished right now.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 End Class
