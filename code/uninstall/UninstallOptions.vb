@@ -1,9 +1,9 @@
 ﻿Imports Microsoft.Win32
 
-Public Class UninstallOptionsEnglish
+Public Class UninstallOptions
     Dim ProgramFiles As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
 
-    Private Sub UninstallOptionsEnglish_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+    Private Sub UninstallOptions_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         ' Check if programs have been installed
         If UninstallWizard.InstAeroGlass = True Then
             RemoveAeroGlassCheckBox.Enabled = True
@@ -13,7 +13,7 @@ Public Class UninstallOptionsEnglish
             RemoveONECheckBox.Enabled = True
         End If
 
-        If UninstallWizard.InstUX <> "none" Then
+        If UninstallWizard.InstUX <> "NoUXPatch" Then
             RemoveUXThemePatchCheckBox.Enabled = True
         End If
 
@@ -33,6 +33,10 @@ Public Class UninstallOptionsEnglish
             RemoveGadgetsCheckBox.Enabled = True
         End If
 
+        If UninstallWizard.Inst7TaskTw = True Then
+            Remove7TaskTwCheckBox.Enabled = True
+        End If
+
         ' Choose remove all as standard
         RemoveEverythingRadioButton.Checked = True
     End Sub
@@ -41,6 +45,7 @@ Public Class UninstallOptionsEnglish
         ' Disable and check all checkboxes when chosen remove all
         ProgramListGroupBox.Visible = False
         InfoRemoveOnlyThemeRadioButton.Enabled = False
+        InfoRemoveChooseRadioButton.Enabled = False
 
         If RemoveAeroGlassCheckBox.Enabled = True Then
             RemoveAeroGlassCheckBox.Checked = True
@@ -84,12 +89,19 @@ Public Class UninstallOptionsEnglish
         Else
             RemoveGadgetsCheckBox.Checked = False
         End If
+
+        If Remove7TaskTwCheckBox.Enabled = True Then
+            Remove7TaskTwCheckBox.Checked = True
+        Else
+            Remove7TaskTwCheckBox.Checked = False
+        End If
     End Sub
 
     Private Sub RemoveOnlyThemeRadioButton_CheckedChanged(sender As Object, e As EventArgs) Handles RemoveOnlyThemeRadioButton.CheckedChanged
         ' Disable and uncheck all checkboxes when chosen remove only theme
         ProgramListGroupBox.Visible = False
         InfoRemoveOnlyThemeRadioButton.Enabled = True
+        InfoRemoveChooseRadioButton.Enabled = False
         RemoveAeroGlassCheckBox.Checked = False
         RemoveONECheckBox.Checked = False
         RemoveUXThemePatchCheckBox.Checked = False
@@ -97,20 +109,26 @@ Public Class UninstallOptionsEnglish
         RestoreSysFilesCheckBox.Checked = False
         RemoveSoundsCheckBox.Checked = False
         RemoveGadgetsCheckBox.Checked = False
+        Remove7TaskTwCheckBox.Checked = False
     End Sub
 
     Private Sub InfoRemoveOnlyThemeRadioButton_Click(sender As Object, e As EventArgs) Handles InfoRemoveOnlyThemeRadioButton.Click
-        UninstallOptionsInfoRemoveOnlyThemeEnglish.ShowDialog()
+        UninstallOptionsInfoRemoveOnlyTheme.ShowDialog()
+    End Sub
+
+    Private Sub InfoRemoveSelect_Click(sender As Object, e As EventArgs) Handles InfoRemoveChooseRadioButton.Click
+        MessageBox.Show("Info: You can still remove most of those listed programs later in the system’s Control Panel.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub RemoveChooseRadioButton_CheckedChanged(sender As Object, e As EventArgs) Handles RemoveChooseRadioButton.CheckedChanged
         ProgramListGroupBox.Visible = True
         InfoRemoveOnlyThemeRadioButton.Enabled = False
+        InfoRemoveChooseRadioButton.Enabled = True
     End Sub
 
-    Private Sub RemoveONECheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles RemoveONECheckBox.CheckedChanged
-        If RemoveONECheckBox.Checked = False Then
-            MessageBox.Show("Restoring the system files later manually needs extended knowledge of modification of system files, so choose it now to remove it if you are unsure of doing it.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    Private Sub RestoreSysFilesCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles RestoreSysFilesCheckBox.CheckedChanged
+        If RestoreSysFilesCheckBox.Checked = False Then
+            MessageBox.Show("Restoring the system files later manually needs extended knowledge of modification of system files, so choose this option now to restore them, if you are unsure of doing it yourself.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -158,22 +176,26 @@ Public Class UninstallOptionsEnglish
                 UninstallWizard.UninstGadgets = False
             End If
 
+            If Remove7TaskTwCheckBox.Checked = True Then
+                UninstallWizard.Uninst7TaskTw = True
+            Else
+                UninstallWizard.Uninst7TaskTw = False
+            End If
+
             Me.Dispose()
-            UninstallUninstallEnglish.Show()
+            UninstallUninstall.Show()
         End If
     End Sub
 
     Private Sub CloseButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
-        Me.Close()
+        Application.Exit()
     End Sub
 
-    Private Sub UninstallOptionsEnglish_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If e.CloseReason = CloseReason.UserClosing Then
-            If MessageBox.Show("Are you sure you want to cancel? The uninstaller will be closed.", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = System.Windows.Forms.DialogResult.Yes Then
-                UninstallWizard.Close()
-            ElseIf System.Windows.Forms.DialogResult.No Then
-                e.Cancel = True
-            End If
+    Private Sub UninstallOptions_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If MessageBox.Show("Are you sure you want to cancel? The uninstaller will be closed.", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = System.Windows.Forms.DialogResult.Yes Then
+            Application.Exit()
+        ElseIf System.Windows.Forms.DialogResult.No Then
+            e.Cancel = True
         End If
     End Sub
 End Class
