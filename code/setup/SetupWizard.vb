@@ -1,4 +1,4 @@
-Imports Microsoft.Win32
+﻿Imports Microsoft.Win32
 Imports System.Configuration
 Imports System.IO
 Imports System.Globalization
@@ -26,13 +26,58 @@ Public Class SetupWizard
     ' Variables for program
     Dim ProgramFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
     Public ProgDir = ProgramFiles & "\Windows 8.1 to 8 RP Converter"
-    Public LanguageForLocalisedStrings As String = CultureInfo.CurrentUICulture.Name.Replace("-", "_")
-    Public IsSelectedLanguageDisplayLanguage As Boolean = True
+    Public LanguageForLocalisedStrings As String = String.Empty
+    Public IsSelectedLanguageDisplayLanguage As Boolean = False
 
     Private Sub SetupWizard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Set language for English to universal i.e. no region
-        If CultureInfo.CurrentUICulture.Name.StartsWith("en") Then
-            LanguageForLocalisedStrings = "en"
+        ' Detect system language and choose language automatically
+        Select Case CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName
+            Case "DEU"
+                ProgLanguage = "de-DE"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case "ENG"
+                ProgLanguage = "en-GB"
+                LanguageForLocalisedStrings = "en"
+            Case "ENU"
+                ProgLanguage = "en-US"
+                LanguageForLocalisedStrings = "en"
+            Case "ESN"
+                ProgLanguage = "es-ES"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case "FRA"
+                ProgLanguage = "fr-FR"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case "ITA"
+                ProgLanguage = "it-IT"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case "NLD"
+                ProgLanguage = "nl-NL"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case "PTB"
+                ProgLanguage = "pt-BR"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case "PTG"
+                ProgLanguage = "pt-PT"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case "KOR"
+                ProgLanguage = "ko-KR"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case "RUS"
+                ProgLanguage = "ru-RU"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case "UKR"
+                ProgLanguage = "uk-UA"
+                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
+            Case Else
+                ProgLanguage = "en-US"
+                LanguageForLocalisedStrings = "en"
+        End Select
+
+        ' Check if UI language is in program language list
+        If CultureInfo.CurrentUICulture.Name = ProgLanguage Then
+            IsSelectedLanguageDisplayLanguage = True
+        Else
+            IsSelectedLanguageDisplayLanguage = False
         End If
 
         ' Check if OS is Windows 8.1
@@ -43,7 +88,8 @@ Public Class SetupWizard
                 Else
                     MessageBox.Show(My.Resources.ResourceManager.GetString("IsNotWin8_en"), My.Resources.ResourceManager.GetString("NotSupportedOS_en"), MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End If
-                Me.Close()
+                Application.Exit()
+                Exit Sub
             End If
         End Using
 
@@ -54,7 +100,8 @@ Public Class SetupWizard
             Else
                 MessageBox.Show(My.Resources.ResourceManager.GetString("No64BitProcess_en"), My.Resources.ResourceManager.GetString("Error_en"), MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
-            Me.Close()
+            Application.Exit()
+            Exit Sub
         End If
 
         ' Check if program has already been installed
@@ -64,109 +111,22 @@ Public Class SetupWizard
             Else
                 MessageBox.Show(My.Resources.ResourceManager.GetString("AlreadyInstalled_en"), My.Resources.ResourceManager.GetString("Warning_en"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
-            Me.Close()
-        End If
-    End Sub
-
-    Private Sub SetupWizard_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
-        ' Detect system language and choose language automatically
-        If CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "DEU" Then
-            LangSelectCB.SelectedIndex = 0
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "ENG" Then
-            LangSelectCB.SelectedIndex = 1
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "ENU" Then
-            LangSelectCB.SelectedIndex = 2
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
-            LangSelectCB.SelectedIndex = 3
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "FRA" Then
-            LangSelectCB.SelectedIndex = 4
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "ITA" Then
-            LangSelectCB.SelectedIndex = 5
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "NLD" Then
-            LangSelectCB.SelectedIndex = 6
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "PTB" Then
-            LangSelectCB.SelectedIndex = 7
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "PTG" Then
-            LangSelectCB.SelectedIndex = 8
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "KOR" Then
-            LangSelectCB.SelectedIndex = 9
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "RUS" Then
-            LangSelectCB.SelectedIndex = 10
-        ElseIf CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName = "UKR" Then
-            LangSelectCB.SelectedIndex = 11
-        Else
-            LangSelectCB.SelectedIndex = 2
-        End If
-    End Sub
-
-    Private Sub LangSelectCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LangSelectCB.SelectedIndexChanged
-        Select Case LangSelectCB.SelectedIndex
-            Case 0
-                ProgLanguage = "de-DE"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-            Case 1
-                ProgLanguage = "en-GB"
-                LanguageForLocalisedStrings = "en"
-            Case 2
-                ProgLanguage = "en-US"
-                LanguageForLocalisedStrings = "en"
-            Case 3
-                ProgLanguage = "es-ES"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-            Case 4
-                ProgLanguage = "fr-FR"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-            Case 5
-                ProgLanguage = "it-IT"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-            Case 6
-                ProgLanguage = "nl-NL"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-            Case 7
-                ProgLanguage = "pt-BR"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-            Case 8
-                ProgLanguage = "pt-PT"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-            Case 9
-                ProgLanguage = "ko-KR"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-            Case 10
-                ProgLanguage = "ru-RU"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-            Case 11
-                ProgLanguage = "uk-UA"
-                LanguageForLocalisedStrings = ProgLanguage.Replace("-", "_")
-        End Select
-
-        ' Set localised strings for UI on SetupWizard window
-        Me.Text = My.Resources.ResourceManager.GetString("SetupWizardText_" & LanguageForLocalisedStrings)
-        LangSelectLabel.Text = My.Resources.ResourceManager.GetString("LangSelectLabel_" & LanguageForLocalisedStrings)
-        OKButton.Text = My.Resources.ResourceManager.GetString("OKButton_" & LanguageForLocalisedStrings)
-        CloseButton.Text = My.Resources.ResourceManager.GetString("CloseButton_" & LanguageForLocalisedStrings)
-    End Sub
-
-    Private Sub OKButton_Click(sender As Object, e As EventArgs) Handles OKButton.Click
-        ' If language choice does not match display language
-        If ProgLanguage = CultureInfo.CurrentUICulture.Name Then
-            IsSelectedLanguageDisplayLanguage = True
-        Else
-            IsSelectedLanguageDisplayLanguage = False
+            Application.Exit()
+            Exit Sub
         End If
 
-        ' Load program finally
+        ' Wait 3 seconds before showing Welcome screen
+        System.Threading.Thread.Sleep(3000)
+
+        ' Show SetupWelcome screen now
         Me.Hide()
         SetupWelcome.Show()
     End Sub
 
-    Private Sub CancelButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
-        Me.Close()
-    End Sub
-
     Private Sub SetupWizard_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         ' Delete temporary files, if existing, when closing program -> delete program folder in LocalAppData 
-        If FileIO.FileSystem.DirectoryExists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\SetupWindows8RPConv") Then
-            FileIO.FileSystem.DeleteDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\SetupWindows8RPConv", FileIO.DeleteDirectoryOption.DeleteAllContents)
+        If FileIO.FileSystem.DirectoryExists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\Moha_Logiciels") Then
+            FileIO.FileSystem.DeleteDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\Moha_Logiciels", FileIO.DeleteDirectoryOption.DeleteAllContents)
         End If
     End Sub
 End Class

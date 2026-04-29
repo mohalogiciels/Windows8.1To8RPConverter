@@ -3,6 +3,7 @@ Imports System.ComponentModel
 Imports System.Configuration
 Imports System.IO
 Imports System.IO.Compression
+Imports System.Globalization
 Imports System.Security.AccessControl
 Imports System.Security.Principal
 
@@ -94,23 +95,23 @@ Public Class SetupInstall
                     End With
                 End Using
             Case "CreateRestorePoint"
-                '' Creating system restore point
+                ' Creating system restore point
                 If RestorePoint.CreateRestorePoint("Installed Windows 8.1 to 8 RP Converter", 0, 100) = 0 Then
                     RestorePointCreated = True
                 Else
                     RestorePointCreated = False
                 End If
             Case "ExtractResourcesFolder"
-                '' Extract resources file from program resources
+                ' Extract resources file from program resources
                 ExtractFiles(My.Resources.ResourceFile, ResFolder)
             Case "InstAeroGlass"
-                '' Change install directory to user’s root drive
+                ' Change install directory to user’s root drive
                 Dim AeroGlassSetupInfFilePath As String = ResFolder & "\AeroGlass\settings.inf"
                 Dim AeroGlassSetupInfFile As String() = File.ReadAllLines(AeroGlassSetupInfFilePath)
                 AeroGlassSetupInfFile(2) = "Dir=" & Environ("SystemDrive") & "\AeroGlass"
                 File.WriteAllLines(AeroGlassSetupInfFilePath, AeroGlassSetupInfFile)
                 Erase AeroGlassSetupInfFile
-                '' Start Aero Glass setup
+                ' Start Aero Glass setup
                 Using AeroGlassSetup As New Process
                     With AeroGlassSetup
                         .StartInfo.FileName = ResFolder & "\AeroGlass\setup-w8.1-1.4.6.exe"
@@ -120,7 +121,7 @@ Public Class SetupInstall
                     End With
                 End Using
                 Using AeroRegKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\DWM", True)
-                    AeroRegKey.SetValue("CustomThemeAtlas", "")
+                    AeroRegKey.SetValue("CustomThemeAtlas", String.Empty)
                     AeroRegKey.Close()
                 End Using
             Case "InstONE"
@@ -183,7 +184,7 @@ Public Class SetupInstall
                         DetailsTextBox.AppendText(" Finished!" & vbCrLf)
                     End If
                 End If
-                '' Create shortcut on desktop
+                ' Create shortcut on desktop
                 If DetailsTextBox.InvokeRequired Then
                     DetailsTextBox.Invoke(Sub() DetailsTextBox.AppendText("Creating shortcut on desktop..."))
                 Else
@@ -216,7 +217,7 @@ Public Class SetupInstall
             Case "InstUltraUX"
                 Using UltraUXSetup As New Process
                     With UltraUXSetup
-                        .StartInfo.FileName = ResFolder & "\UltraUX\UltraUXThemePatcher_4.5.0.exe"
+                        .StartInfo.FileName = ResFolder & "\UXTheme\UltraUXThemePatcher_4.5.0.exe"
                         .Start()
                         .WaitForExit()
                     End With
@@ -258,7 +259,7 @@ Public Class SetupInstall
                         DetailsTextBox.AppendText(" Finished!" & vbCrLf)
                     End If
                 End If
-                '' UXTSB\Registry
+                ' UXTSB\Registry
                 If DetailsTextBox.InvokeRequired Then
                     DetailsTextBox.Invoke(Sub() DetailsTextBox.AppendText("Registering files..."))
                 Else
@@ -275,7 +276,7 @@ Public Class SetupInstall
                     End If
                     RegKey.Close()
                 End Using
-                '' UXTSB\Registry\SysWOW64
+                ' UXTSB\Registry\SysWOW64
                 If SetupWizard.BitnessSystem = "64Bit" Then
                     Using RegKey32 As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Windows", True)
                         If RegKey32.GetValue("AppInit_DLLs") <> String.Empty Then
@@ -290,13 +291,13 @@ Public Class SetupInstall
                     End Using
                 End If
             Case "InstQuero"
-                '' Change install directory to ProgramFiles folder
+                ' Change install directory to ProgramFiles folder
                 Dim QueroSetupInfFilePath As String = ResFolder & "\Quero\settings.inf"
                 Dim QueroSetupInfFile As String() = File.ReadAllLines(QueroSetupInfFilePath)
                 QueroSetupInfFile(2) = "Dir=" & ProgramFiles & "\Quero Toolbar"
                 File.WriteAllLines(QueroSetupInfFilePath, QueroSetupInfFile)
                 Erase QueroSetupInfFile
-                '' Start Quero Toolbar setup
+                ' Start Quero Toolbar setup
                 Using QueroSetup As New Process
                     With QueroSetup
                         If SetupWizard.BitnessSystem = "64Bit" Then
@@ -315,7 +316,7 @@ Public Class SetupInstall
                 Dim EveryoneSidAsUserName As String = New SecurityIdentifier(WellKnownSidType.WorldSid, Nothing).Translate(GetType(NTAccount)).Value
                 Dim EveryoneAuditRule As FileSystemAuditRule = New FileSystemAuditRule(EveryoneSidAsUserName, FileSystemRights.CreateFiles + FileSystemRights.CreateDirectories + FileSystemRights.WriteAttributes + FileSystemRights.WriteExtendedAttributes + FileSystemRights.Delete + FileSystemRights.ChangePermissions + FileSystemRights.TakeOwnership, AuditFlags.Success + AuditFlags.Failure)
                 Dim UiRibbonAuditRules As New FileSecurity
-                '' Replace the files UIRibbon.dll, UIRibbonRes.dll and <UILanguage>\UIRibbon.dll.mui
+                ' Replace the files UIRibbon.dll, UIRibbonRes.dll and <UILanguage>\UIRibbon.dll.mui
                 With SysFilesSetup
                     .StartInfo.FileName = WinDir & "\System32\takeown.exe"
                     .StartInfo.Arguments = "/f " & WinDir & "\System32\UIRibbon.dll /a"
@@ -408,7 +409,7 @@ Public Class SetupInstall
                 Else
                     DetailsTextBox.AppendText(" Finished!" & vbCrLf)
                 End If
-                '' New files -> change to original FileSystemSecurity
+                ' New files -> change to original FileSystemSecurity
                 With SysFilesSetup
                     .StartInfo.FileName = WinDir & "\System32\icacls.exe"
                     .StartInfo.Arguments = WinDir & "\System32\UIRibbon.dll /setowner ""NT SERVICE\TrustedInstaller"""
@@ -484,7 +485,7 @@ Public Class SetupInstall
                 UiRibbonAuditRules.SetAuditRule(EveryoneAuditRule)
                 File.SetAccessControl(WinDir & "\System32\" & SetupWizard.ProgLanguage & "\UIRibbon.dll.mui", UiRibbonAuditRules)
                 UiRibbonAuditRules = Nothing
-                '' If System is 64-bit, repeat for files in SysWOW64
+                ' If System is 64-bit, repeat for files in SysWOW64
                 If SetupWizard.BitnessSystem = "64Bit" Then
                     With SysFilesSetup
                         .StartInfo.FileName = WinDir & "\System32\takeown.exe"
@@ -572,7 +573,7 @@ Public Class SetupInstall
                     Else
                         DetailsTextBox.AppendText(" Finished!" & vbCrLf)
                     End If
-                    '' New files in SysWOW64 -> change to original FileSystemSecurity
+                    ' New files in SysWOW64 -> change to original FileSystemSecurity
                     With SysFilesSetup
                         .StartInfo.FileName = WinDir & "\System32\icacls.exe"
                         .StartInfo.Arguments = WinDir & "\SysWOW64\UIRibbon.dll /setowner ""NT SERVICE\TrustedInstaller"""
@@ -669,7 +670,7 @@ Public Class SetupInstall
                         .WaitForExit()
                     End With
                 End Using
-                '' Apply settings with registry file 7TaskTw.reg
+                ' Apply settings with registry file 7TaskTw.reg
                 Using ApplyRegFile As New Process
                     With ApplyRegFile
                         .StartInfo.FileName = WinDir & "\System32\reg.exe"
@@ -689,7 +690,7 @@ Public Class SetupInstall
         ' Check if system protection is enabled
         Using SystemRestoreRegKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", False)
             If SystemRestoreRegKey.GetValue("RPSessionInterval") = 1 Then
-                '' If enabled then create system restore point
+                ' If enabled then create system restore point
                 If RestorePoint IsNot Nothing Then
                     BgWorker.RunWorkerAsync("CreateRestorePoint")
                     WaitUntilTaskFinishes()
@@ -697,7 +698,7 @@ Public Class SetupInstall
                         If MessageBox.Show("System restore point has not been created! It is not recommended to install this without creating a restore point. Do you want to proceed with the installation anyway?", "System restore point not created", MessageBoxButtons.YesNo, MessageBoxIcon.Error) = System.Windows.Forms.DialogResult.Yes Then
                             SetupLauncher()
                         ElseIf System.Windows.Forms.DialogResult.No Then
-                            SetupWizard.Close()
+                            Application.Exit()
                         End If
                     Else
                         ' Start setup now
@@ -705,7 +706,7 @@ Public Class SetupInstall
                     End If
                 End If
             Else
-                '' If not, ask if it should be enabled now
+                ' If not, ask if it should be enabled now
                 If MessageBox.Show("System protection is disabled. Do you want to enable it now to create a system restore point?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = System.Windows.Forms.DialogResult.Yes Then
                     If RestorePoint IsNot Nothing Then
                         If RestorePoint.Enable(Environ("SystemDrive") & "\") = 0 Then
@@ -717,7 +718,7 @@ Public Class SetupInstall
                                 RestorePointCreated = False
                                 SetupLauncher()
                             ElseIf System.Windows.Forms.DialogResult.No Then
-                                SetupWizard.Close()
+                                Application.Exit()
                             End If
                         End If
                     End If
@@ -726,7 +727,7 @@ Public Class SetupInstall
                         RestorePointCreated = False
                         SetupLauncher()
                     ElseIf System.Windows.Forms.DialogResult.No Then
-                        SetupWizard.Close()
+                        Application.Exit()
                     End If
                 End If
             End If
@@ -736,7 +737,7 @@ Public Class SetupInstall
     Private Sub SetupLauncher()
         ' Check if system restore point has been created
         If RestorePointCreated = True Then
-            '' Change progress bar
+            ' Change progress bar
             With ProgressBarSetup
                 .Style = ProgressBarStyle.Continuous
                 .Value = 0
@@ -771,21 +772,21 @@ Public Class SetupInstall
         Try
             RunSetup()
         Catch ex As Exception
-            '' If error occurs, create log file
+            ' If error occurs, create log file
             MessageBox.Show("An error occured during installation: " & ex.Message & " Please check the log file created on the desktop to check what happened, and try it again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             DetailsTextBox.AppendText(vbCrLf & "ERROR: " & ex.Message & vbCrLf)
-            '' Enable close button
+            ' Enable close button
             CloseProgram = True
             CloseButton.Enabled = True
             CloseButton.Text = "&Close"
-            '' Create log file
+            ' Create log file
             CreateLogFile(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory))
-            '' Delete ProgramFiles directory
+            ' Delete ProgramFiles directory
             If FileIO.FileSystem.DirectoryExists(SetupWizard.ProgDir) Then
                 FileIO.FileSystem.DeleteDirectory(SetupWizard.ProgDir, FileIO.DeleteDirectoryOption.DeleteAllContents)
             End If
-            '' Close program
-            SetupWizard.Close()
+            ' Close program
+            Application.Exit()
         End Try
     End Sub
 
@@ -834,7 +835,7 @@ Public Class SetupInstall
         DetailsTextBox.AppendText(ActionLabel.Text)
         BgWorker.RunWorkerAsync("ExtractResourcesFolder")
         WaitUntilTaskFinishes()
-        '' Check if file has been extracted -> folder has been created
+        ' Check if file has been extracted -> folder has been created
         If FileIO.FileSystem.DirectoryExists(ResFolder) Then
             ProgressBarSetup.PerformStep()
             ProgressBarSetup.Refresh()
@@ -843,7 +844,7 @@ Public Class SetupInstall
             DetailsTextBox.AppendText(" Finished!" & vbCrLf)
         Else
             MessageBox.Show("Resources file could not be extracted!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            SetupWizard.Close()
+            Application.Exit()
         End If
 
         ' Install Aero Glass
@@ -875,7 +876,7 @@ Public Class SetupInstall
 
         ' Install UXTheme patcher
         If SetupWizard.InstUX = "UltraUX" Then
-            '' Install UltraUX
+            ' Install UltraUX
             ActionLabel.Text = "Installing UltraUXThemePatcher..."
             ActionLabel.Refresh()
             DetailsTextBox.AppendText(ActionLabel.Text)
@@ -887,7 +888,7 @@ Public Class SetupInstall
             ActionLabel.Refresh()
             DetailsTextBox.AppendText(" Finished!" & vbCrLf)
         ElseIf SetupWizard.InstUX = "UXTSB" Then
-            '' Install UXTSB
+            ' Install UXTSB
             ActionLabel.Text = "Installing UXThemeSignatureBypass..."
             ActionLabel.Refresh()
             DetailsTextBox.AppendText(ActionLabel.Text & vbCrLf)
@@ -932,7 +933,7 @@ Public Class SetupInstall
         ActionLabel.Refresh()
         DetailsTextBox.AppendText(ActionLabel.Text)
         FileIO.FileSystem.CopyDirectory(ResFolder & "\Theme\Themes", WinDir & "\Resources\Themes", True)
-        '' Blue/white address bar
+        ' Blue/white address bar
         If SetupWizard.AddressBarStyle = "BlueAddressBar" Then
             FileIO.FileSystem.RenameFile(WinDir & "\Resources\Themes\aerorp\aero_blue.msstyles", "aerolite.msstyles")
             FileIO.FileSystem.DeleteFile(WinDir & "\Resources\Themes\aerorp\aero_nonblue.msstyles")
@@ -941,7 +942,7 @@ Public Class SetupInstall
             FileIO.FileSystem.DeleteFile(WinDir & "\Resources\Themes\aerorp\aero_blue.msstyles")
         End If
         DetailsTextBox.AppendText(" Finished!" & vbCrLf)
-        '' Copy wallpaper files
+        ' Copy wallpaper files
         DetailsTextBox.AppendText("Copying wallpaper files to " & WinDir & "\Web\Wallpaper\Windows 8 Release Preview...")
         FileIO.FileSystem.CopyDirectory(ResFolder & "\Theme\Wallpaper\Windows 8 Release Preview", WinDir & "\Web\Wallpaper\Windows 8 Release Preview", True)
         ProgressBarSetup.PerformStep()
@@ -1006,7 +1007,7 @@ Public Class SetupInstall
         DetailsTextBox.AppendText(ActionLabel.Text & vbCrLf)
         ' Create registry keys, copy files
         DetailsTextBox.AppendText("Copying file firstrun.xht to " & ResFolder & "...")
-        '' Copy firstrun.xht from resources and put files in program files
+        ' Copy firstrun.xht from resources and put files in program files
         If SetupWizard.InstQuero = True Then
             File.WriteAllBytes(SetupWizard.ProgDir & "\firstrun.xht", My.Resources.ResourceManager.GetObject("FirstRunQuero_" & SetupWizard.LanguageForLocalisedStrings))
         ElseIf SetupWizard.InstQuero = False Then
@@ -1016,21 +1017,29 @@ Public Class SetupInstall
             FileIO.FileSystem.MoveDirectory(ResFolder & "\firstrun", SetupWizard.ProgDir & "\firstrun")
         End If
         DetailsTextBox.AppendText(" Finished!" & vbCrLf)
-        '' Create config file in <ProgDir>\config.xml
+        ' Create config file in <ProgDir>\config.xml
         DetailsTextBox.AppendText("Creating config file in path " & SetupWizard.ProgDir & "\config.xml...")
         FileIO.FileSystem.CopyFile(ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath, SetupWizard.ProgDir & "\config.xml")
         DetailsTextBox.AppendText(" Finished!" & vbCrLf)
-        '' Create Control Panel\Programs entry
-        '' EstimatedSize is theme & wallpaper without programs -> about 18,2 MB
+        ' Create Control Panel\Programs entry
+        ' EstimatedSize is theme & wallpaper without programs -> about 18,2 MB
         DetailsTextBox.AppendText("Creating Control Panel entry...")
         Using RegKeyControlPanel As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", True)
             RegKeyControlPanel.CreateSubKey("Windows 8.1 to 8 RP Converter")
             Using RegKeyControlPanelEntry As RegistryKey = RegKeyControlPanel.OpenSubKey("Windows 8.1 to 8 RP Converter", True)
                 With RegKeyControlPanelEntry
-                    .SetValue("DisplayIcon", ResFolder & "\program.ico", RegistryValueKind.String)
+                    .SetValue("Contact", "https://www.github.com/mohalogiciels", RegistryValueKind.String)
+                    .SetValue("DisplayIcon", SetupWizard.ProgDir & "\firstrun.exe,0", RegistryValueKind.String)
                     .SetValue("DisplayName", "Windows 8.1 to Windows 8 RP Converter", RegistryValueKind.String)
                     .SetValue("DisplayVersion", "1.0 beta", RegistryValueKind.String)
+                    If SetupWizard.ProgLanguage = "en-GB" Then
+                        .SetValue("Language", 2057, RegistryValueKind.DWord)
+                    Else
+                        .SetValue("Language", 1033, RegistryValueKind.DWord)
+                    End If
+                    ' .SetValue("Language", CultureInfo.CurrentUICulture.LCID, RegistryValueKind.DWord)
                     .SetValue("EstimatedSize", 18572, RegistryValueKind.DWord)
+                    .SetValue("HelpLink", "https://mohalogiciels.runasp.net/Contact/", RegistryValueKind.String)
                     .SetValue("InstallLocation", SetupWizard.ProgDir, RegistryValueKind.String)
                     .SetValue("ModifyPath", """" & SetupWizard.ProgDir & "\modify.exe""", RegistryValueKind.String)
                     .SetValue("NoModify", 0, RegistryValueKind.DWord)
@@ -1038,14 +1047,18 @@ Public Class SetupInstall
                     .SetValue("NoRepair", 1, RegistryValueKind.DWord)
                     .SetValue("Publisher", "Moha Logiciels", RegistryValueKind.String)
                     .SetValue("UninstallString", """" & SetupWizard.ProgDir & "\uninstall.exe""", RegistryValueKind.String)
-                    .SetValue("Version", "1.0.0.0", RegistryValueKind.String)
+                    .SetValue("URLInfoAbout", "https://mohalogiciels.runasp.net/Contact/", RegistryValueKind.String)
+                    .SetValue("URLUpdateInfo", "https://mohalogiciels.runasp.net/Downloads/Self.xht#win8rp", RegistryValueKind.String)
+                    .SetValue("Version", 16777216, RegistryValueKind.DWord)
+                    .SetValue("VersionMajor", 1, RegistryValueKind.DWord)
+                    .SetValue("VersionMinor", 0, RegistryValueKind.DWord)
                     .Close()
                 End With
                 RegKeyControlPanel.Close()
             End Using
         End Using
         DetailsTextBox.AppendText(" Finished!" & vbCrLf)
-        '' Copy modify.exe, uninstall.exe and firstrun.exe to program folder
+        ' Copy modify.exe, uninstall.exe and firstrun.exe to program folder
         DetailsTextBox.AppendText("Copying modify.exe, uninstall.exe and firstrun.exe to " & SetupWizard.ProgDir & "...")
         FileIO.FileSystem.WriteAllBytes(SetupWizard.ProgDir & "\modify.exe", My.Resources.ModifyProgram, False)
         FileIO.FileSystem.WriteAllBytes(SetupWizard.ProgDir & "\uninstall.exe", My.Resources.UninstallProgram, False)
@@ -1053,7 +1066,7 @@ Public Class SetupInstall
         DetailsTextBox.AppendText(" Finished!" & vbCrLf)
         ProgressBarSetup.PerformStep()
         ProgressBarSetup.Refresh()
-        '' Set autostart reg key for firstrun.exe
+        ' Set autostart reg key for firstrun.exe
         DetailsTextBox.AppendText("Creating autostart entry...")
         If Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\RunOnce", False) Is Nothing Then
             Using CurrentVersionRegKey As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion", True)
@@ -1069,17 +1082,15 @@ Public Class SetupInstall
             AutorunRegKey.Close()
         End Using
         DetailsTextBox.AppendText(" Finished!" & vbCrLf)
-        '' Remove temp files and folder
+        ' Remove temp files and folder
         ActionLabel.Text = "Removing temp files..."
         ActionLabel.Refresh()
         DetailsTextBox.AppendText(ActionLabel.Text)
-        Dim LocalAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-        If FileIO.FileSystem.DirectoryExists(LocalAppData & "\SetupWindows8RPConv") Then
-            FileIO.FileSystem.DeleteDirectory(LocalAppData & "\SetupWindows8RPConv", FileIO.DeleteDirectoryOption.DeleteAllContents)
+        If FileIO.FileSystem.DirectoryExists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\Moha_Logiciels") Then
+            FileIO.FileSystem.DeleteDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\Moha_Logiciels", FileIO.DeleteDirectoryOption.DeleteAllContents)
             DetailsTextBox.AppendText(" Finished!" & vbCrLf)
         Else
-            MessageBox.Show("Temporary files could not be found!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            DetailsTextBox.AppendText(" Failed!" & vbCrLf)
+            DetailsTextBox.AppendText(" No temp files found!" & vbCrLf)
         End If
         ProgressBarSetup.PerformStep()
         ProgressBarSetup.Refresh()
@@ -1088,7 +1099,7 @@ Public Class SetupInstall
         ActionLabel.Text = "Installation has been successfully completed!"
         ActionLabel.Refresh()
         DetailsTextBox.AppendText(ActionLabel.Text & vbCrLf)
-        '' Change Next button to Finish
+        ' Change Next button to Finish
         NextButton.Text = "&Finish"
         NextButton.Enabled = True
         CloseProgram = True
@@ -1102,7 +1113,7 @@ Public Class SetupInstall
 
     Private Sub NextButton_Click(sender As Object, e As EventArgs) Handles NextButton.Click
         If CloseProgram = True Then
-            Me.Close()
+            Application.Exit()
         Else
             MessageBox.Show("The setup cannot be finished right now.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
@@ -1110,7 +1121,7 @@ Public Class SetupInstall
 
     Private Sub CloseButton_Click(sender As Object, e As EventArgs) Handles CloseButton.Click
         If CloseProgram = True Then
-            Me.Close()
+            Application.Exit()
         Else
             MessageBox.Show("The setup cannot be finished right now.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
@@ -1120,31 +1131,28 @@ Public Class SetupInstall
         If CloseProgram = False Then
             MessageBox.Show("The setup cannot be finished right now.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         ElseIf CloseProgram = True Then
-            If e.CloseReason = CloseReason.UserClosing Then
-                If ShowMessageBoxForRestartOnExit = True Then
-                    ' Save log file
-                    If MessageBox.Show("Do you want to save the details pane to a log file in the program’s directory?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = System.Windows.Forms.DialogResult.Yes Then
-                        CreateLogFile()
-                    End If
-                    ' Restart prompt -> wait 3 seconds before restarting
-                    If MessageBox.Show("You need to restart your system so that the changes take effect. Do you want to restart now?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = System.Windows.Forms.DialogResult.Yes Then
-                        Using ShutDownProcess As New Process
-                            With ShutDownProcess
-                                .StartInfo.FileName = WinDir & "\System32\shutdown.exe"
-                                .StartInfo.Arguments = "/r /t 3"
-                                .StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                                .Start()
-                            End With
-                        End Using
-                        SetupWizard.Close()
-                    ElseIf System.Windows.Forms.DialogResult.No Then
-                        Application.Exit()
-                    End If
-                Else
+            If ShowMessageBoxForRestartOnExit = True Then
+                ' Save log file
+                If MessageBox.Show("Do you want to save the details pane to a log file in the program’s directory?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = System.Windows.Forms.DialogResult.Yes Then
+                    CreateLogFile()
+                End If
+                ' Restart prompt -> wait 3 seconds before restarting
+                If MessageBox.Show("You need to restart your system so that the changes take effect. Do you want to restart now?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = System.Windows.Forms.DialogResult.Yes Then
+                    Using ShutDownProcess As New Process
+                        With ShutDownProcess
+                            .StartInfo.FileName = WinDir & "\System32\shutdown.exe"
+                            .StartInfo.Arguments = "/r /t 3"
+                            .StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                            .Start()
+                        End With
+                    End Using
+                    Application.Exit()
+                ElseIf System.Windows.Forms.DialogResult.No Then
                     Application.Exit()
                 End If
+            Else
+                Application.Exit()
             End If
         End If
     End Sub
-
 End Class

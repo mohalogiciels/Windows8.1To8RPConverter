@@ -4,6 +4,10 @@
         Me.Dispose()
     End Sub
 
+    Private Sub WebSiteContactFormLinkLabel_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles WebSiteContactFormLinkLabel.LinkClicked
+        Process.Start("https://mohalogiciels.runasp.net/Contact/")
+    End Sub
+
     Private Sub GitHubRepoLinkLabel_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles GitHubRepoLinkLabel.LinkClicked
         Process.Start("https://github.com/mohalogiciels/Windows8.1To8RPConverter")
     End Sub
