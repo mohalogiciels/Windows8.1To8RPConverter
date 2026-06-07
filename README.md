@@ -15,4 +15,4 @@ For more information and pictures of this version on the BetaWiki, [click here](
 To get more info about this program, visit the Download section of my website [here](https://mohalogiciels.runasp.net/Downloads/#win8rp).
 
 ## Download
-**Download the latest version now:** <a href="https://github.com/mohalogiciels/Windows8.1To8RPConverter/releases/latest">here</a>
+**Download the latest version** <a href="https://github.com/mohalogiciels/Windows8.1To8RPConverter/releases/latest">here</a> on GitHub.
