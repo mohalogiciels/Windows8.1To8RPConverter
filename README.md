@@ -12,7 +12,7 @@ This program converts Windows 8.1 to Windows 8 Release Preview (also known as Wi
 For more information and pictures of this version on the BetaWiki, [click here](https://betawiki.net/wiki/Windows_8_build_8400).
 
 ## Info
-To get more info about this program, visit the Download section of my website [here](https://mohalogiciels.runasp.net/Downloads#win8rp).
+To get more info about this program, visit the Download section of my website [here](https://mohalogiciels.runasp.net/Downloads/#win8rp).
 
 ## Download
 **Download the latest version now:** <a href="https://github.com/mohalogiciels/Windows8.1To8RPConverter/releases/latest">here</a>
