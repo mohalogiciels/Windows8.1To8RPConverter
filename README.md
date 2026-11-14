@@ -1,5 +1,5 @@
 # Windows 8.1 to Windows 8 Release Preview Converter
-also known as **Windows 8.1 to Windows 8 RP Converter**/**Windows 8.1 to 8 RP Converter**
+also known as **Windows 8.1 to Windows 8 RP Converter** or **Windows 8.1 to 8 RP Converter**
 
 <sup>made with Visual Basic .NET in Visual Studio 2013 in Windows 8.1</sub>
 
